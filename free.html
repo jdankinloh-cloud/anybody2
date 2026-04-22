@@ -7,11 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="https://unpkg.com/lucide@latest" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
 <style>
+.loader-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999}
+.loader{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#000;--bg2:#0a0a0a;--bg3:#111;
@@ -175,10 +174,6 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .guide-errors-block .err-item strong{color:var(--red)}
 .gtag.works{background:rgba(74,222,128,0.1);border-color:rgba(74,222,128,0.2);color:var(--green)}
 .gtag.nowork{background:rgba(248,113,113,0.1);border-color:rgba(248,113,113,0.2);color:var(--red)}
-
-.loader-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999}
-.loader{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -220,6 +215,10 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 </div>
 <div class="toast" id="toast">Copied!</div>
 
+<script src="https://telegram.org/js/telegram-web-app.js" async></script>
+<script src="https://unpkg.com/lucide@latest" async></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async id="supabase-script"></script>
+<script src="supabase-config.js"></script>
 <script>
 const GUIDES=[
   {id:'fireworks-50',title:'Fireworks AI — $50 бесплатно',tags:['AI','Работает'],status:'works',thumb:null,
@@ -243,15 +242,25 @@ storedGuides.forEach(g=>guideMap.set(g.id,g));
 let ALL_GUIDES = Array.from(guideMap.values());
 
 let supabaseClient=null;
-if(typeof window.supabase!=='undefined' && typeof SUPABASE_URL!=='undefined' && SUPABASE_URL!=='YOUR_SUPABASE_URL'){
-  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+function initSupabase(){
+  if(typeof window.supabase!=='undefined' && typeof SUPABASE_URL!=='undefined'){
+    supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+    loadGuidesFromSupabase();
+  }else{
+    setTimeout(initSupabase,100);
+  }
 }
+initSupabase();
 
 async function loadGuidesFromSupabase(){
   const loader=document.getElementById('loader');
+  const timeout=setTimeout(()=>{if(loader)loader.style.display='none'},3000);
+  
   if(!supabaseClient){
     if(loader)loader.style.display='none';
     renderGuides();
+    clearTimeout(timeout);
     return;
   }
   try{
@@ -266,9 +275,9 @@ async function loadGuidesFromSupabase(){
     }
     renderGuides();
   }catch(e){console.log('Supabase error:',e)}
+  clearTimeout(timeout);
   if(loader)loader.style.display='none';
 }
-loadGuidesFromSupabase();
 
 let currentGuideFilter='all';
 
