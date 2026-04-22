@@ -166,9 +166,15 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .guide-empty-title{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:6px}
 .guide-empty-sub{font-size:12px;color:var(--text3);line-height:1.5}
 
+.loader-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999}
+.loader{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+<div class="loader-overlay" id="loader">
+  <div class="loader"></div>
+</div>
 <div id="app">
   <div class="page active" id="pageResources">
     <div class="top-bar">
@@ -488,6 +494,7 @@ $search.oninput=()=>{searchQuery=$search.value.trim();render();};
 if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.ready();window.Telegram.WebApp.expand();}
 
 updateStats(); render(); 
+document.getElementById('loader').style.display='none';
 function initIcons(){
   if(typeof lucide!=='undefined'){lucide.createIcons();}
   else{setTimeout(initIcons,100);}
