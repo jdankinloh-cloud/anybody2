@@ -127,7 +127,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
 .section-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin:16px 0 10px;padding-left:2px}
 
-.bottom-bar{flex-shrink:0;padding:0 16px 8px}
+.bottom-bar{position:fixed;bottom:10px;left:0;right:0;padding:0 16px 8px;z-index:50;max-width:480px;margin:0 auto}
 .tabbar{display:flex;align-items:center;justify-content:center;padding:6px;border-radius:28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.08),inset 0 -1px 0 rgba(0,0,0,0.3),0 4px 24px rgba(0,0,0,0.5);position:relative;overflow:hidden}
 .tabbar::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,0.06) 0%,transparent 100%);border-radius:28px 28px 0 0;pointer-events:none}
 .tabbar .bt{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:22px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);cursor:pointer;transition:all .3s cubic-bezier(0.4,0,0.2,1);position:relative;z-index:1}
@@ -140,7 +140,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .page{display:none;flex-direction:column;flex:1;overflow:hidden}
 .page.active{display:flex}
 
-.guide-feed{flex:1;overflow-y:auto;padding:0 16px 24px;-webkit-overflow-scrolling:touch}
+.guide-feed{flex:1;overflow-y:auto;padding:0 16px 70px;-webkit-overflow-scrolling:touch}
 .guide-feed::-webkit-scrollbar{width:3px}
 .guide-feed::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .guide-card{border-radius:var(--radius2);overflow:hidden;background:var(--bg2);border:1px solid var(--border);margin-bottom:12px;cursor:pointer;transition:all .15s}
@@ -200,6 +200,10 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
       <div class="bt active" data-page="free">
         <div class="bt-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 4.8 0 0 1 12 8a4.8 4.8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg></div>
         Халява
+      </div>
+      <div class="bt" data-page="aitools">
+        <div class="bt-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></div>
+        AI Tools
       </div>
     </div>
   </div>
@@ -377,6 +381,7 @@ document.querySelectorAll('.chip[data-gfilter]').forEach(chip=>{
 });
 
 document.querySelector('.bt[data-page="index"]').onclick=()=>{window.location.href='index.html';};
+document.querySelector('.bt[data-page="aitools"]').onclick=()=>{window.location.href='aitools.html';};
 
 if(window.Telegram&&window.Telegram.WebApp){window.Telegram.WebApp.ready();window.Telegram.WebApp.expand();}
 
